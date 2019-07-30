@@ -20,8 +20,12 @@ def data_prep (data, quartz, feldspar, lithic):
     stacked_data = np.vstack((stacked_data, summed_rows))
     Q = (stacked_data[0] / stacked_data[3] * 100)
     F = (stacked_data[1] / stacked_data[3] * 100)
+
     y = Q / 100
+    print(y)
     x = (1 - F / 100) - (y / 2)
+    print(x)
+
     return x, y
 
 
