@@ -57,14 +57,19 @@ def field_boundaries(scheme):
         l3 = ["craton interior", 0.38, 0.92, 0]
         l4 = ["recycled orogen", 0.54, 0.62, 0]
         l5 = ["dissected arcs", 0.41, 0.35, 0]
-        l6 = ["transitional arc", 0.45, 0.15, 0] ###
-        l7 = ["undissected arc", 0.8, 0.05, 0] ####
+        l6 = ["transitional arc", 0.45, 0.15, 0]
+        l7 = ["undissected arc", 0.8, 0.05, 0]
         labels = [l1, l2, l3, l4, l5, l6, l7]
+    elif scheme == 'blank':
+        c1 = ['triangle', (0, 0), (0.5, 1), (1, 0), (0, 0)]
+        classifications = [c1]
+        labels = []
+
     return classifications, labels
 
 
 def plot_qfl(data, top, left, right, matrix, plottype, toplab, leftlab, rightlab, color, size,):
-    list_valid_types = ['Pettijohn_1977', 'Dickinson_1983']
+    list_valid_types = ['Pettijohn_1977', 'Dickinson_1983', 'blank']
     if plottype not in list_valid_types:
         raise ValueError("Plot type not recognised, valid types are Pettijohn_1977 and Dickinson_1983")
 
@@ -76,43 +81,6 @@ def plot_qfl(data, top, left, right, matrix, plottype, toplab, leftlab, rightlab
         ax.text(lab[1], lab[2], lab[0], ha="center", va="center", rotation=lab[3], size=8)
 
     ax.scatter(x, y, color=color, s=size, edgecolor='k', zorder=10)
-
-    # add the fields for each petrograpic classification
-    for i in range(len(classifications)):
-        polygon = classifications[i][1:]
-        path = Path(polygon)
-        # check if every polygon in the loop contains points and color green if true
-        index = path.contains_points(np.column_stack((x, y)))
-        if sum(index) > 0:
-            ax.add_patch(patches.PathPatch(path, alpha=0.1, facecolor='green', lw=0, zorder=0))
-        patch = patches.PathPatch(path, color=None, facecolor=None, fill=False, lw=1.5, zorder=1)
-        ax.add_patch(patch)
-
-    final_data = data.copy()
-    for i in range(len(classifications)):
-        polygon = classifications[i][1:]
-        path = Path(polygon)
-        # check if points are within each polygon
-        # the radius argument allows samples plotting on boundary to be classified
-        index = path.contains_points(np.column_stack((x, y)), radius=-0.01)
-        index1 = path.contains_points(np.column_stack((x, y)), radius=0.01)
-        for j in range(len(index)):
-            if index[j] or index1[j]:
-                final_data.loc[j, "Pettijohn"] = classifications[i][
-                    0]  # add the classification to the column Pettijohn in the datatable
-                if matrix is not None:
-                    if matrix[j] > 15 and matrix[j] < 75:  # change the classification if maxtix > 15% and less <75%
-                        if classifications[i][0] == 'Sublith Arenite' or classifications[i][0] == 'Lith Arenite':
-                            final_data.loc[j, "Pettijohn"] = 'Lithic Wacke'
-                        elif classifications[i][0] == 'Sub Arkose' or classifications[i][0] == 'Arkosic Arenite':
-                            final_data.loc[j, "Pettijohn"] = 'Arkpsic Wacke'
-                        elif classifications[i][0] == 'Quartz Arenite':
-                            final_data.loc[j, "Pettijohn"] = 'Quartz Wacke'
-                    elif matrix[j] > 75:
-                        final_data.loc[j, "Pettijohn"] = 'Mudrock'
-            else:
-                pass
-    final_data = final_data.set_index('Classification')
     ax.set_frame_on(False)
     ax.axes.get_xaxis().set_visible(False)
     ax.axes.get_yaxis().set_visible(False)
@@ -122,7 +90,46 @@ def plot_qfl(data, top, left, right, matrix, plottype, toplab, leftlab, rightlab
     ax.text(0.5, 1.05, str(toplab), ha="center", va="center", rotation=0, size=12, zorder=0)
     ax.set_xlim(-0.1, 1.1)
     ax.set_ylim(-0.1, 1.1)
-    return final_data, fig
+
+    # add the fields for each petrograpic classification
+    for i in range(len(classifications)):
+        polygon = classifications[i][1:]
+        path = Path(polygon)
+        # check if every polygon in the loop contains points and color green if true
+        index = path.contains_points(np.column_stack((x, y)))
+        if plottype != 'blank':
+            if sum(index) > 0:
+                ax.add_patch(patches.PathPatch(path, alpha=0.1, facecolor='green', lw=0, zorder=0))
+        patch = patches.PathPatch(path, color=None, facecolor=None, fill=False, lw=1.5, zorder=1)
+        ax.add_patch(patch)
+    if plottype != 'blank':
+        final_data = data.copy()
+        for i in range(len(classifications)):
+            polygon = classifications[i][1:]
+            path = Path(polygon)
+            # check if points are within each polygon
+            # the radius argument allows samples plotting on boundary to be classified
+            index = path.contains_points(np.column_stack((x, y)), radius=-0.01)
+            index1 = path.contains_points(np.column_stack((x, y)), radius=0.01)
+            for j in range(len(index)):
+                if index[j] or index1[j]:
+                    final_data.loc[j, "Pettijohn"] = classifications[i][
+                        0]  # add the classification to the column Pettijohn in the datatable
+                    if matrix is not None:
+                        if matrix[j] > 15 and matrix[j] < 75:  # change the classification if maxtix > 15% and less <75%
+                            if classifications[i][0] == 'Sublith Arenite' or classifications[i][0] == 'Lith Arenite':
+                                final_data.loc[j, "Pettijohn"] = 'Lithic Wacke'
+                            elif classifications[i][0] == 'Sub Arkose' or classifications[i][0] == 'Arkosic Arenite':
+                                final_data.loc[j, "Pettijohn"] = 'Arkpsic Wacke'
+                            elif classifications[i][0] == 'Quartz Arenite':
+                                final_data.loc[j, "Pettijohn"] = 'Quartz Wacke'
+                        elif matrix[j] > 75:
+                            final_data.loc[j, "Pettijohn"] = 'Mudrock'
+                else:
+                    pass
+        final_data = final_data.set_index('Classification')
+        return final_data, fig
+    return None, fig
 
 
 if __name__ == "__main__":
@@ -138,7 +145,7 @@ if __name__ == "__main__":
     # the clay matrix can be None if not present
     matrix = data_pct['PM+Cem']
     # for QFL top = quzrtz, left = feldspar, right = lithic
-    # plot type options are 'Dickinson_1983' or 'Pettijohn_1977'
+    # plot type options are 'Dickinson_1983', 'Pettijohn_1977' or 'blank'
     # ToDo add more plot types
     classified_data, plot = plot_qfl(data, top=quartz, left=fsp, right=lithic, matrix=matrix,  plottype='Pettijohn_1977', toplab='Q', leftlab='F', rightlab='L', color='r', size=15,)
     plt.show()
