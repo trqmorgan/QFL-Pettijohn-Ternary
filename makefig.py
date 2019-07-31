@@ -24,6 +24,7 @@ def data_prep (data, top, left, right):
     x = (1 - L / 100) - (y / 2)
     return x, y
 
+
 def field_boundaries(scheme):
     if scheme == 'Pettijohn_1977':
         c1 = ['Quartz arenite', (0.5, 0.9), (0.525, 0.95), (0.5, 1), (0.475, 0.95), (0.5, 0.9)]
@@ -61,6 +62,7 @@ def field_boundaries(scheme):
         labels = [l1, l2, l3, l4, l5, l6, l7]
     return classifications, labels
 
+
 def plot_qfl(data, top, left, right, matrix, plottype, toplab, leftlab, rightlab, color, size,):
     list_valid_types = ['Pettijohn_1977', 'Dickinson_1983']
     if plottype not in list_valid_types:
@@ -74,7 +76,6 @@ def plot_qfl(data, top, left, right, matrix, plottype, toplab, leftlab, rightlab
         ax.text(lab[1], lab[2], lab[0], ha="center", va="center", rotation=lab[3], size=8)
 
     ax.scatter(x, y, color=color, s=size, edgecolor='k', zorder=10)
-
 
     # add the fields for each petrograpic classification
     for i in range(len(classifications)):
@@ -134,11 +135,11 @@ if __name__ == "__main__":
     quartz = data_pct['Qm'] + data_pct['Qmu'] + data_pct['Qp']
     fsp = data_pct['Plag'] + data_pct['Afsp']
     lithic = data_pct['Lf']
-    #the clay matrix can be None if not present
+    # the clay matrix can be None if not present
     matrix = data_pct['PM+Cem']
     # for QFL top = quzrtz, left = feldspar, right = lithic
     # plot type options are 'Dickinson_1983' or 'Pettijohn_1977'
-    #ToDo add more plot types
+    # ToDo add more plot types
     classified_data, plot = plot_qfl(data, top=quartz, left=fsp, right=lithic, matrix=matrix,  plottype='Pettijohn_1977', toplab='Q', leftlab='F', rightlab='L', color='r', size=15,)
     plt.show()
     print(classified_data)
