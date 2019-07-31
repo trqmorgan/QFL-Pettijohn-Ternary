@@ -61,10 +61,6 @@ def field_boundaries(scheme):
         labels = [l1, l2, l3, l4, l5, l6, l7]
     return classifications, labels
 
-
-
-
-
 def plot_qfl(data, top, left, right, matrix, plottype, toplab, leftlab, rightlab, color, size,):
     list_valid_types = ['Pettijohn_1977', 'Dickinson_1983']
     if plottype not in list_valid_types:
