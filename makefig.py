@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.path import Path
 import matplotlib.patches as patches
+import matplotlib.lines as mlines
 
 
 def data_prep (data, top, left, right):
@@ -68,7 +69,7 @@ def field_boundaries(scheme):
     return classifications, labels
 
 
-def plot_qfl(data, top, left, right, matrix, plottype, toplab, leftlab, rightlab, color, size,):
+def plot_qfl(data, top, left, right, matrix=None, plottype='blank', toplab='', leftlab='', rightlab='', grid=True, color='r', size=15):
     list_valid_types = ['Pettijohn_1977', 'Dickinson_1983', 'blank']
     if plottype not in list_valid_types:
         raise ValueError("Plot type not recognised, valid types are Pettijohn_1977 and Dickinson_1983")
@@ -90,6 +91,35 @@ def plot_qfl(data, top, left, right, matrix, plottype, toplab, leftlab, rightlab
     ax.text(0.5, 1.05, str(toplab), ha="center", va="center", rotation=0, size=12, zorder=0)
     ax.set_xlim(-0.1, 1.1)
     ax.set_ylim(-0.1, 1.1)
+
+    if grid:
+        grid1 = np.linspace(0.1, 0.9, 9)
+        grid2 = np.linspace(0.05, .45, 9)
+        axislabels = list(range(10, 100, 10))
+        for g1, g2, axlab in zip(grid1, grid2, axislabels):
+            l0 = mlines.Line2D([g2, 1 - g2], [g1, g1], linestyle=':', linewidth=0.5, zorder=0, color='k')
+            l1 = mlines.Line2D([g1, g2], [0, g1], linestyle=':', linewidth=0.5, zorder=0, color='k')
+            l2 = mlines.Line2D([1 - g1, 1 - g2], [0, g1], linestyle=':', linewidth=0.5, zorder=0, color='k')
+            ax.text(g1, -0.02, axlab, ha="center", va="center", rotation=0, size=5)
+            ax.text(1.02 - g2, g1, axlab, ha="center", va="center", rotation=0, size=5)
+            ax.text(0.48 - g2, 1 - g1, axlab, ha="center", va="center", rotation=0, size=5)
+            ax.add_line(l0)
+            ax.add_line(l1)
+            ax.add_line(l2)
+    if grid:
+        grid1 = np.linspace(0.1, 0.9, 9)
+        grid2 = np.linspace(0.05, .45, 9)
+        axislabels = list(range(10, 100, 10))
+        for g1, g2, axlab in zip(grid1, grid2, axislabels):
+            l0 = mlines.Line2D([g2, 1 - g2], [g1, g1], linestyle=':', linewidth=0.5, zorder=0, color='k')
+            l1 = mlines.Line2D([g1, g2], [0, g1], linestyle=':', linewidth=0.5, zorder=0, color='k')
+            l2 = mlines.Line2D([1 - g1, 1 - g2], [0, g1], linestyle=':', linewidth=0.5, zorder=0, color='k')
+            ax.text(g1, -0.02, axlab, ha="center", va="center", rotation=0, size=5)
+            ax.text(1.02 - g2, g1, axlab, ha="center", va="center", rotation=0, size=5)
+            ax.text(0.48 - g2, 1 - g1, axlab, ha="center", va="center", rotation=0, size=5)
+            ax.add_line(l0)
+            ax.add_line(l1)
+            ax.add_line(l2)
 
     # add the fields for each petrograpic classification
     for i in range(len(classifications)):
@@ -147,7 +177,8 @@ if __name__ == "__main__":
     # for QFL top = quzrtz, left = feldspar, right = lithic
     # plot type options are 'Dickinson_1983', 'Pettijohn_1977' or 'blank'
     # ToDo add more plot types
-    classified_data, plot = plot_qfl(data, top=quartz, left=fsp, right=lithic, matrix=matrix,  plottype='Pettijohn_1977', toplab='Q', leftlab='F', rightlab='L', color='r', size=15,)
+    classified_data, plot = plot_qfl(data, top=quartz, left=fsp, right=lithic, matrix=matrix, plottype='Pettijohn_1977'
+                                     , toplab='Q', leftlab='F', rightlab='L', grid=True, color='r', size=15)
     plt.show()
     print(classified_data)
 
