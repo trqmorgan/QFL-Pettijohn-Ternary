@@ -13,10 +13,12 @@ the use of the QFL ternary as well as the file to run the plotting.
     pandas data frame containing the data to which classifications can be appended
     
     top, left, right: str or array-like
-    the three paramaters to plot. Commonly these will be 1D arrays, but can also be strings referencing columns in the dataframe
+    the three paramaters to plot. Commonly these will be 1D arrays, but can also be strings referencing columns in the
+    dataframe
     
     matrix: str or array-like, optional, default=None
-    if plotting petrographic data clay matrix values can be included. Commonly this will be a 1D array, but can also be a string referencing a column in the dataframe
+    if plotting petrographic data clay matrix values can be included. Commonly this will be a 1D array, but can also be
+    a string referencing a column in the dataframe
     
     plottype: str, optional, default='blank'
     The background on which to plot the data, options are 'Dickinson_1983', 'Pettijohn_1977' or 'blank'.
