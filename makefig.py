@@ -35,10 +35,12 @@ def field_boundaries(scheme):
         c5 = ['Subarkose', (0.5, 0.5), (0.375, 0.75), (0.475, 0.95), (0.5, 0.9), (0.5, 0.5)]
         classifications = [c1, c2, c3, c4, c5]
         # label, x, y, rotation
+
         l1 = ["Quartz arenite", 0.62, 0.95, 0]
         l2 = ["Sublitharenite", 0.7, 0.8, 0]
+
         l3 = ["Lithic arenite", 0.75, 0.05, 0]
-        l4 = ["Subarkose", 0.3, 0.8, 0]
+        l4 = ["Subarkose", 0.32, 0.83, 0]
         l5 = ["Arkosic arenite", 0.25, 0.05, 0]
         labels = [l1, l2, l3, l4, l5]
     elif scheme == 'Dickinson_1983':
