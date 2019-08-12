@@ -35,7 +35,7 @@ def field_boundaries(scheme):
         classifications = [c1, c2, c3, c4, c5]
         # label, x, y, rotation
         l1 = ["Quartz arenite", 0.62, 0.95, 0]
-        l2 = ["Sublitharenitee", 0.7, 0.8, 0]
+        l2 = ["Sublitharenite", 0.7, 0.8, 0]
         l3 = ["Lithic arenite", 0.75, 0.05, 0]
         l4 = ["Subarkose", 0.3, 0.8, 0]
         l5 = ["Arkosic arenite", 0.25, 0.05, 0]
@@ -120,7 +120,7 @@ def plot_qfl(data, top, left, right, matrix, plottype, toplab, leftlab, rightlab
                             if classifications[i][0] == 'Sublith Arenite' or classifications[i][0] == 'Lith Arenite':
                                 final_data.loc[j, "Pettijohn"] = 'Lithic Wacke'
                             elif classifications[i][0] == 'Sub Arkose' or classifications[i][0] == 'Arkosic Arenite':
-                                final_data.loc[j, "Pettijohn"] = 'Arkpsic Wacke'
+                                final_data.loc[j, "Pettijohn"] = 'Arkosic Wacke'
                             elif classifications[i][0] == 'Quartz Arenite':
                                 final_data.loc[j, "Pettijohn"] = 'Quartz Wacke'
                         elif matrix[j] > 75:
